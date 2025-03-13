@@ -1,0 +1,23 @@
+{
+    "name": "eduard/account",
+    "description": "Account module for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "laravel/socialite": "^5.14",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eduard\\Account\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eduard\\Account\\AccountServiceProvider"
+            ]
+        }
+    }
+}
