@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 class CustomValidateToken
 {
     const ERROR_402 = 402;
+    const ERROR_403 = 403;
     const ERROR_404 = 404;
 
     /**
@@ -73,7 +74,7 @@ class CustomValidateToken
 
                 return $next($request);
             } else {
-                return abort(self::ERROR_402, $this->translate->getTokenDecline());
+                return abort(self::ERROR_403, $this->translate->getDeclineAccess());
             }
         } else {
             return abort(self::ERROR_404, $this->translate->getAccessDecline());
