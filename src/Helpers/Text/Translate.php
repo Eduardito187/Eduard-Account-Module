@@ -113,10 +113,19 @@ class Translate
     const ACCOUNT_RESPONSE = "Cuenta obtenida exitosamente.";
     const ERROR_QUERY = "Ocurrio un error al realizar la acción.";
     const SUCCESS_QUERY = "Accion realizada exitosamente.";
+    const DECLINE_ACCESS_SECTION = "No tienes permiso para acceder a esta sección.";
 
     public function __construct()
     {
         //
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeclineAccess()
+    {
+        return self::DECLINE_ACCESS_SECTION;
     }
 
     /**
