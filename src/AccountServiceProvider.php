@@ -66,6 +66,7 @@ class AccountServiceProvider extends ServiceProvider
 
         // Load API routes
         $this->loadRoutesFrom(__DIR__.'/Http/routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/Http/routes/web.php');
 
         // Register middleware
         $this->app['router']->aliasMiddleware('custom.token', CustomValidateToken::class);
