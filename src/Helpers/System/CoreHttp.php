@@ -2,13 +2,13 @@
 
 namespace Eduard\Account\Helpers\System;
 
-use Eduard\Search\Models\IndexConfiguration;
 use Exception;
-use Eduard\Account\Models\AutorizationToken;
-use Eduard\Account\Helpers\Text\Translate;
 use Eduard\Account\Models\Config;
-use Eduard\Account\Models\RestrictDomain;
 use Eduard\Account\Models\SystemToken;
+use Eduard\Account\Models\RestrictDomain;
+use Eduard\Account\Helpers\Text\Translate;
+use Eduard\Search\Models\IndexConfiguration;
+use Eduard\Account\Models\AutorizationToken;
 use Eduard\Account\Models\HistoryCustomersUuid;
 
 class CoreHttp
@@ -23,8 +23,34 @@ class CoreHttp
      */
     public $responseApi = [];
 
-    public function __construct(Translate $translate) {
+    /**
+     * Constructor
+     * 
+     * @param Translate $translate
+     */
+    public function __construct(
+        Translate $translate
+    ) {
         $this->translate = $translate;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function detectClient($headers)
+    {
+        if (!$this->validateTokenRequest($headers)) {
+            throw new Exception("Token de acceso no válido.");
+        }
+
+        $token = $this->getTokenRequest($headers);
+        $clientToken = $this->getClientToken($token);
+
+        if(!$clientToken) {
+            throw new Exception("La cuenta no es válida.");
+        }
+
+        return $clientToken->client;
     }
 
     /**
