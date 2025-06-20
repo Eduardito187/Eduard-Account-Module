@@ -87,6 +87,14 @@ class Client extends Model
     /**
      * @inheritDoc
      */
+    public function prefixIndexes($prefix)
+    {
+        return $this->indexes()->where('code', 'like', '%'.$prefix)->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function autorizationToken() {
         return $this->hasOne(AutorizationToken::class, 'id_client', 'id');
     }
