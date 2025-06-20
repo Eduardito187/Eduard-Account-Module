@@ -24,6 +24,11 @@ class CoreHttp
     public $responseApi = [];
 
     /**
+     * @var string
+     */
+    public $prefix = "";
+
+    /**
      * Constructor
      * 
      * @param Translate $translate
@@ -49,6 +54,8 @@ class CoreHttp
         if(!$clientToken) {
             throw new Exception("La cuenta no es válida.");
         }
+
+        $this->getPrefixIndex($headers);
 
         return $clientToken->client;
     }
@@ -118,6 +125,18 @@ class CoreHttp
         } else {
             if (!$this->existApiKey($headers["api-key"][0])) {
                 throw new Exception("El indice perteneciente al Api-Key se encuentra desactivado.");
+            }
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPrefixIndex($headers)
+    {
+        if (array_key_exists("api-key", $headers)) {
+            if (count($headers["api-key"]) > 0) {
+                $this->prefix = $headers["api-key"][0] ?? "";
             }
         }
     }
