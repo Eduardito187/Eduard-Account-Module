@@ -15,5 +15,5 @@ class CustomerAccountInformation extends Model
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'integer';
-    public $timestamps = false;
+    public $timestamps = true;
 }
