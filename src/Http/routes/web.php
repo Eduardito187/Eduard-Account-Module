@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\PasswordResetController;
-use App\Http\Controllers\Auth\GithubController;
-use App\Http\Controllers\Auth\GoogleController;
+use Eduard\Account\Http\Controllers\Auth\PasswordResetController;
+use Eduard\Account\Http\Controllers\Auth\GithubController;
+use Eduard\Account\Http\Controllers\Auth\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
