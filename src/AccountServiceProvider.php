@@ -35,23 +35,6 @@ class AccountServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Load views
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'account');
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/account'),
-        ], 'account-views');
-
-        // Load translate
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'account');
-        $this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/account'),
-        ], 'account-lang');
-
-        // Load files resources
-        $this->publishes([
-            __DIR__.'/../resources/public' => public_path('vendor/account'),
-        ], 'account-assets');
-
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/./database/migrations');
 
