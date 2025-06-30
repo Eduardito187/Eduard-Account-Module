@@ -116,8 +116,8 @@ class Client extends Model
     /**
      * @inheritDoc
      */
-    public function recentMonthHistoryQuerySearch() {
-        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->whereIn('code', ['feed_response', 'page_search_response'])->where('created_at', '>=', now()->subDays(30));
+    public function recentMonthHistoryQuerySearch($idClient) {
+        return HistoryQuerySearch::where('id_client', $idClient)->whereIn('code', ['feed_response', 'page_search_response'])->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
     }
 
     /**
