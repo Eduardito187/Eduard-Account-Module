@@ -565,7 +565,7 @@ class Customer
             $data[] = array(
                 "code" => $index->code,
                 "name" => $index->name,
-                "search" => $this->convertNumber(intval($index->recentMonthHistoryQuerySearch()->count() ?? 0)),
+                "search" => $this->convertNumber(intval($index->recentMonthHistoryQuerySearch($index->id, $index->id_client) ?? 0)),
                 "record" => $this->convertNumber(intval($index->recentMonthHistoryIndex()->sum("count") ?? 0))
             );
         }
@@ -626,7 +626,7 @@ class Customer
         foreach ($currentClient->indexes as $index) {
             $dataIndex[] = [
                 "code" => $index->code,
-                "query" => round($index->recentMonthHistoryQuerySearch()->count()),
+                "query" => round($index->recentMonthHistoryQuerySearch($index->id, $index->id_client) ?? 0),
                 "record" => round($index->recentMonthHistoryIndex()->sum("count"))
             ];
         }
