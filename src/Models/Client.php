@@ -116,35 +116,35 @@ class Client extends Model
     /**
      * @inheritDoc
      */
-    public function recentMonthHistoryQuerySearch($idClient) {
-        return HistoryQuerySearch::where('id_client', $idClient)->whereIn('code', ['feed_response', 'page_search_response'])->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
+    public function recentMonthHistoryQuerySearch() {
+        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->whereIn('code', ['feed_response', 'page_search_response'])->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 
     /**
      * @inheritDoc
      */
     public function recentMonthHistoryIndex() {
-        return $this->hasMany(HistoryIndexProccess::class, 'id_client', 'id')->where('created_at', '>=', now()->subDays(30));
+        return $this->hasMany(HistoryIndexProccess::class, 'id_client', 'id')->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 
     /**
      * @inheritDoc
      */
     public function recentMonthHistoryQuerySearchFeed() {
-        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'feed_response')->where('created_at', '>=', now()->subDays(30));
+        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'feed_response')->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 
     /**
      * @inheritDoc
      */
     public function recentMonthHistoryQuerySearchPage() {
-        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'page_search_response')->where('created_at', '>=', now()->subDays(30));
+        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'page_search_response')->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 
     /**
      * @inheritDoc
      */
     public function recentMonthHistoryQuerySearchSuggestion() {
-        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'suggestion_feed_response')->where('created_at', '>=', now()->subDays(30));
+        return $this->hasMany(HistoryQuerySearch::class, 'id_client', 'id')->where('code', 'suggestion_feed_response')->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
     }
 }
