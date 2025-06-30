@@ -57,7 +57,7 @@ class PasswordResetController extends Controller
 
         $user->password = $this->customer->encryptedPawd($request->password);
         $user->save();
-        $this->customer->sendEventConfirmRestorePassword($passwordReset->email);
+        $this->customer->sendConfirmRestorePassword($passwordReset->email);
         $passwordReset->delete();
 
         return redirect('/login')->with('message-success', '¡Tu contraseña ha sido restablecida!');
