@@ -605,8 +605,8 @@ class Customer
         $currentClient = $customer->client;
 
         return [
-            "query" => $this->generateStructureDataBody($currentClient->recentMonthHistoryQuerySearch()),
-            "suggestion" => $this->generateStructureSuggestionBody($currentClient->recentMonthHistoryQuerySearchSuggestion()),
+            "query" => $this->generateStructureDataBody($currentClient->recentMonthHistoryQuerySearch($currentClient->id)),
+            "suggestion" => $this->generateStructureSuggestionBody($currentClient->recentMonthHistoryQuerySearchSuggestion($currentClient->id)),
             "data" => $this->generateStructureDataIndexes($currentClient)
         ];
     }
