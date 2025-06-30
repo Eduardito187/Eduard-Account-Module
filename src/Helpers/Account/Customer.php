@@ -146,7 +146,7 @@ class Customer
             throw new Exception("Customer no identificado.");
         }
 
-        $this->sendEventRestorePassword($customer->mail);
+        $this->proccessRestorePassword($customer->mail);
     }
 
     public function getCustomerByMail(string $mail)
