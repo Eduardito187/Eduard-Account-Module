@@ -612,7 +612,7 @@ class Customer
     private function generateStructureDataIndexes($currentClient)
     {
         return [
-            "counter" => $this->getCounterDataRecordArray($currentClient->recentMonthHistoryIndex())
+            "counter" => $this->getCounterDataRecordArray($currentClient)
         ];
     }
 
@@ -671,12 +671,15 @@ class Customer
         return $this->convertNumber($count);
     }
 
-    private function getCounterDataRecordArray($collection)
+    private function getCounterDataRecordArray($client)
     {
-        $from = Carbon::now()->subMonthNoOverflow()->startOfMonth()->startOfDay();
-        $to = Carbon::now()->subMonthNoOverflow()->endOfMonth()->endOfDay();
-        $sum = (int) $collection->whereBetween('created_at', [$from, $to])->sum('count');
-        return $this->convertNumber($sum);
+        $countTotals = 0;
+
+        foreach ($client->indexes() as $index) {
+            $countTotals += $index->withCount('indexProducts')->firstOrFail();
+        }
+
+        return $this->convertNumber($countTotals);
     }
 
     private function getTimeDataArray($collection)
