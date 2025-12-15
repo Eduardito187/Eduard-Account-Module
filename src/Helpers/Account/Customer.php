@@ -673,12 +673,7 @@ class Customer
 
     private function getCounterDataRecordArray($client)
     {
-        $countTotals = 0;
-
-        foreach ($client->indexes() as $index) {
-            $countTotals += $index->withCount('indexProducts')->firstOrFail();
-        }
-
+        $countTotals = (int) $client->indexes()->withCount('indexProducts')->get()->sum('index_products_count');
         return $this->convertNumber($countTotals);
     }
 
@@ -687,7 +682,7 @@ class Customer
         $from = Carbon::now()->startOfMonth()->startOfDay();
         $to = Carbon::now()->endOfDay();
         $avgMs = (float) $collection->whereBetween('created_at', [$from, $to])->whereNotNull('time_execution')->avg('time_execution');
-        return round($avgMs ?: 0);
+        return round($avgMs ?: 0)."ms";
     }
 
     private function convertNumber($number)
