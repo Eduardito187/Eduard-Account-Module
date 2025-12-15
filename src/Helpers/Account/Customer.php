@@ -563,10 +563,9 @@ class Customer
 
         foreach ($customer->client->indexes as $key => $index) {
             $data[] = array(
+                "id" => $index->id,
                 "code" => $index->code,
-                "name" => $index->name,
-                "search" => $this->convertNumber(intval($index->recentMonthHistoryQuerySearch($index->id, $index->id_client) ?? 0)),
-                "record" => $this->convertNumber(intval($index->recentMonthHistoryIndex()->sum("count") ?? 0))
+                "name" => $index->name
             );
         }
 
@@ -578,11 +577,10 @@ class Customer
         $data = [];
 
         $data[] = array(
+            "id" => $customer->client->id,
             "app" => $customer->client->name,
             "code" => $customer->client->code,
-            "index" => $customer->client->indexes()->count(),
-            "search" => $this->convertNumber(intval($customer->client->recentMonthHistoryQuerySearch()->count() ?? 0)),
-            "record" => $this->convertNumber(intval($customer->client->recentMonthHistoryIndex()->sum("count") ?? 0))
+            "index" => $customer->client->indexes()->count()
         );
 
         return $data;
@@ -614,7 +612,6 @@ class Customer
     private function generateStructureDataIndexes($currentClient)
     {
         return [
-            "index" => $this->getDataIndexDashboard($currentClient),
             "counter" => $this->getCounterDataRecordArray($currentClient->recentMonthHistoryIndex())
         ];
     }
@@ -660,54 +657,34 @@ class Customer
 
     private function getCounterSuggestionDataArray($collection)
     {
-        $structure = $this->generateDateArray();
-
-        foreach ($structure["label"] as $date) {
-            $newCollection = clone $collection;
-            $structure["data"][] = round($newCollection->whereDate("created_at", "=", $date)->count() ?? 0);
-        }
-
-        $structure["value"] = $this->convertNumber(array_sum($structure["data"]));
-        return $structure;
+        $from = Carbon::now()->subMonthNoOverflow()->startOfDay();
+        $to = Carbon::now()->endOfDay();
+        $count = (int) $newCollection->whereBetween('created_at', [$from, $to])->count();
+        return $this->convertNumber($count);
     }
 
     private function getCounterDataArray($collection)
     {
-        $structure = $this->generateDateArray();
-
-        foreach ($structure["label"] as $date) {
-            $newCollection = clone $collection;
-            $structure["data"][] = $newCollection->whereDate("created_at", "=", $date)->count() ?? 0;
-        }
-
-        $structure["value"] = $this->convertNumber(array_sum($structure["data"]));
-        return $structure;
+        $from = Carbon::now()->subMonthNoOverflow()->startOfDay();
+        $to = Carbon::now()->endOfDay();
+        $count = (int) $newCollection->whereBetween('created_at', [$from, $to])->count();
+        return $this->convertNumber($count);
     }
 
     private function getCounterDataRecordArray($collection)
     {
-        $structure = $this->generateDateArray();
-
-        foreach ($structure["label"] as $date) {
-            $newCollection = clone $collection;
-            $structure["data"][] = round($newCollection->whereDate("created_at", "=", $date)->sum("count") ?? 0);
-        }
-
-        $structure["value"] = $this->convertNumber(array_sum($structure["data"]));
-        return $structure;
+        $from = Carbon::now()->subMonthNoOverflow()->startOfMonth()->startOfDay();
+        $to = Carbon::now()->subMonthNoOverflow()->endOfMonth()->endOfDay();
+        $sum = (int) $newCollection->whereBetween('created_at', [$from, $to])->sum('count');
+        return $this->convertNumber($sum);
     }
 
     private function getTimeDataArray($collection)
     {
-        $structure = $this->generateDateArray();
-
-        foreach ($structure["label"] as $date) {
-            $newCollection = clone $collection;
-            $structure["data"][] = round($newCollection->whereDate("created_at", "=", $date)->avg("time_execution") ?? 0);
-        }
-
-        $structure["value"] = round(array_sum($structure["data"]) / count($structure["data"]));
-        return $structure;
+        $from = Carbon::now()->startOfMonth()->startOfDay();
+        $to = Carbon::now()->endOfDay();
+        $avgMs = (float) $newCollection->whereBetween('created_at', [$from, $to])->whereNotNull('time_execution')->avg('time_execution');
+        return round($avgMs ?: 0);
     }
 
     private function convertNumber($number)
