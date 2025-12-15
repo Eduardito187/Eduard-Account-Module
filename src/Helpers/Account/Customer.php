@@ -659,7 +659,7 @@ class Customer
     {
         $from = Carbon::now()->subMonthNoOverflow()->startOfDay();
         $to = Carbon::now()->endOfDay();
-        $count = (int) $newCollection->whereBetween('created_at', [$from, $to])->count();
+        $count = (int) $collection->whereBetween('created_at', [$from, $to])->count();
         return $this->convertNumber($count);
     }
 
@@ -667,7 +667,7 @@ class Customer
     {
         $from = Carbon::now()->subMonthNoOverflow()->startOfDay();
         $to = Carbon::now()->endOfDay();
-        $count = (int) $newCollection->whereBetween('created_at', [$from, $to])->count();
+        $count = (int) $collection->whereBetween('created_at', [$from, $to])->count();
         return $this->convertNumber($count);
     }
 
@@ -675,7 +675,7 @@ class Customer
     {
         $from = Carbon::now()->subMonthNoOverflow()->startOfMonth()->startOfDay();
         $to = Carbon::now()->subMonthNoOverflow()->endOfMonth()->endOfDay();
-        $sum = (int) $newCollection->whereBetween('created_at', [$from, $to])->sum('count');
+        $sum = (int) $collection->whereBetween('created_at', [$from, $to])->sum('count');
         return $this->convertNumber($sum);
     }
 
@@ -683,7 +683,7 @@ class Customer
     {
         $from = Carbon::now()->startOfMonth()->startOfDay();
         $to = Carbon::now()->endOfDay();
-        $avgMs = (float) $newCollection->whereBetween('created_at', [$from, $to])->whereNotNull('time_execution')->avg('time_execution');
+        $avgMs = (float) $collection->whereBetween('created_at', [$from, $to])->whereNotNull('time_execution')->avg('time_execution');
         return round($avgMs ?: 0);
     }
 
